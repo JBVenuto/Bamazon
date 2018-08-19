@@ -82,8 +82,19 @@ function addInv() {
             message: "How many units would you like to add to the inventory?"
         }
     ]).then(function(user) {
-        
-    };
+        var newInventory;
+        //Get the current inventory of the product
+        connection.query("SELECT stock_quantity FROM products WHERE id = ?", [user.idNumber], function(err, res) {
+            if(err) throw err;
+            newInventory = res[0].stock_quantity + user.quantity;
+            console.log(oldInventory);
+        })
+        //Update the database with the new inventory
+        connection.query("UPDATE products SET stock_quantity = ? WHERE id = ?", [user.quantity, user.idNumber], function(err) {
+            if (err) throw err;
+        });
+        promptUser();
+    });
 };
 
 //Function that allows the manager to add a product
