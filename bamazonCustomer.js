@@ -4,7 +4,6 @@ var mysql = require("mysql");
 var cTable = require("console.table")
 
 //Variable to hold the table from the database
-var inventory;
 
 //Connect to the database
 var connection = mysql.createConnection({
@@ -19,8 +18,7 @@ function showTable() {
     connection.query("SELECT * FROM products", function(err, res) {
         if(err) throw err;
         // console.log(res);
-        inventory = res;
-        console.log(inventory);
+        console.table(res);
         promptUser();
     });
 };
@@ -39,15 +37,32 @@ function promptUser() {
             message: "How many would you like to buy?"
         }
     ]).then(function(user) {
-        console.log(user.quantity);
-        var iOfInv = parseInt(user.idNumber) - 1;
-        //Find out if the amount the user wants is available 
-        if(user.quantity > inventory[iOfInv].stock_quantity) {
-            console.log("You've had enough. You're cut off.")
-        }
-        else {
-            console.log("We can do that")
-        };
+        connection.query("SELECT * FROM products", function(err, res) {
+
+            console.log(user.quantity);
+
+            //Variables from the user input and database
+            var iOfInv = parseInt(user.idNumber) - 1;
+            var totalAvailable = res[iOfInv].stock_quantity;
+            var newQuantity = totalAvailable - user.quantity;
+
+            console.log("old quant: " + totalAvailable + "new quant: " + newQuantity);
+
+            //Find out if the amount the user wants is available 
+            // if(user.quantity > res[iOfInv].stock_quantity) {
+            
+            if (user.quantity <= totalAvailable){
+                //If the amount ordered is available subract that amount from the database
+                console.log("We can do that");
+                connection.query('UPDATE products SET stock_quantity = ?, WHERE id = ?', [newQuantity, iOfInv], function (error, quant) {
+                if(error) throw error;
+                    console.log("New quantity: " + quant);
+                });
+            }
+            else {
+                console.log("Sorry, we don't have that many in stock.");
+            };
+        })
     });
 };
 
