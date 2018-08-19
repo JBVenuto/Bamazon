@@ -11,16 +11,6 @@ var connection = mysql.createConnection({
     database: "bamazon_db"
 })
 
-//Function that shows the user the available merchandise
-function showTable() {
-    connection.query("SELECT * FROM products", function(err, res) {
-        if(err) throw err;
-        // console.log(res);
-        console.table(res);
-        promptUser();
-    });
-};
-
 //Promt the manager to find out what they would like to do
 function promptUser() {
     inquirer.prompt([
@@ -35,7 +25,7 @@ function promptUser() {
         switch (answer.action) {
             //Run function to view all the products
             case "View products for sale":
-                viewProducts();
+                showTable();
                 break;
 
             //Run function to view low inventory
@@ -55,3 +45,48 @@ function promptUser() {
         }
     })
 }
+
+promptUser();
+
+//Function that shows the manager the available merchandise
+function showTable() {
+    connection.query("SELECT * FROM products", function(err, res) {
+        if(err) throw err;
+        // console.log(res);
+        console.table(res);
+        promptUser();
+    });
+};
+
+//Function that shows the manager products that have less that 25 units in stock
+function lowInv() {
+    connection.query("SELECT * FROM products WHERE stock_quantity < 25", function(err, res) {
+        if(err) throw err;
+        console.table(res);
+        promptUser();
+    });
+};
+
+//Function that allows the manager to add to the inventory for an item
+function addInv() {
+    inquirer.prompt([
+        //Ask the user the ID of the item they want to increase the inventory for
+        {
+            type: "input",
+            name: "idNumber",
+            message: "What is the id number of the product for which you would like to increase the inventory?"
+        },
+        {
+            type: "input",
+            name: "quantity",
+            message: "How many units would you like to add to the inventory?"
+        }
+    ]).then(function(user) {
+        
+    };
+};
+
+//Function that allows the manager to add a product
+function addProduct() {
+
+};
