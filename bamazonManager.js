@@ -31,6 +31,27 @@ function promptUser() {
             choices: ["View products for sale", "View low inventory", "Add to inventory", "Add new product"]
         }
     ]).then(function(answer) {
-        
+        //Switch based on the manager's choice
+        switch (answer.action) {
+            //Run function to view all the products
+            case "View products for sale":
+                viewProducts();
+                break;
+
+            //Run function to view low inventory
+            case "View low inventory":
+                lowInv();
+                break;
+
+            //Run function to add inventory
+            case "Add to inventory":
+                addInv();
+                break
+
+            //Run function to add a new product
+            case "Add new product":
+                addProduct();
+                break
+        }
     })
 }
