@@ -7,6 +7,7 @@ var cTable = require("console.table")
 var iOfInv;
 var totalAvailable;
 var newQuantity;
+var totalPrice;
 
 //Connect to the database
 var connection = mysql.createConnection({
@@ -47,6 +48,7 @@ function promptUser() {
             //Variables from the user input and database
             iOfInv = parseInt(user.idNumber) - 1;
             totalAvailable = res[iOfInv].stock_quantity;
+            totalPrice = res[iOfInv].price * user.quantity;
             newQuantity = totalAvailable - user.quantity;
 
             console.log("old quant: " + totalAvailable + "new quant: " + newQuantity);
@@ -57,6 +59,7 @@ function promptUser() {
             
         if (user.quantity > totalAvailable){
             console.log("Sorry, we don't have that many in stock.")
+            showTable();
         }
         else {
             //If the amount ordered is available subract that amount from the database
@@ -68,6 +71,7 @@ function promptUser() {
                 {id: user.idNumber}
             ], function (error) {
                 if(error) throw error;
+                console.log("Your total comes to $" + totalPrice);
                 showTable();
             });
         };
