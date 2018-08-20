@@ -121,15 +121,9 @@ function addProduct() {
     ]).then(function(user) {
         connection.query("INSERT INTO products SET ?",
         [{
-            product_name: user.name
-        },
-        {
-            department_name: user.department
-        },
-        {
-            price: user.cost
-        },
-        {
+            product_name: user.name,
+            department_name: user.department,
+            price: user.cost,
             stock_quantity: user.quantity
         }], function (err) {
             if(err) throw err;
