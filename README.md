@@ -12,8 +12,8 @@ These apps are written with node.js. They use the following NPM packages: consol
 ![Customer screenshot](images/customer.gif)
 
 ### Manager Application
-![Manager screenshot 1](image/manager1.gif)
+![Manager screenshot 1](images/manager1.gif)
 
-![Manager screenshot 2](image/manager2.gif)
+![Manager screenshot 2](images/manager2.gif)
 
-![Manager screenshot 3](image/manager3.gif)
+![Manager screenshot 3](images/manager3.gif)
