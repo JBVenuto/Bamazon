@@ -127,6 +127,7 @@ function addProduct() {
             stock_quantity: user.quantity
         }], function (err) {
             if(err) throw err;
+            promptUser();
         });
     
     });

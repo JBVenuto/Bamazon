@@ -51,7 +51,6 @@ function promptUser() {
             totalPrice = res[iOfInv].price * user.quantity;
             newQuantity = totalAvailable - user.quantity;
 
-            console.log("old quant: " + totalAvailable + "new quant: " + newQuantity);
         // });
 
         //Find out if the amount the user wants is available 
@@ -64,12 +63,7 @@ function promptUser() {
         else {
             //If the amount ordered is available subract that amount from the database
             console.log("We can do that");
-            console.log("iofInv: " + iOfInv + " newQuantity: " + newQuantity);
-            connection.query('UPDATE products SET ? WHERE ?', 
-            [
-                {stock_quantity: newQuantity}, 
-                {id: user.idNumber}
-            ], function (error) {
+            connection.query('UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ?', [(user.quantity), user.idNumber], function (error) {
                 if(error) throw error;
                 console.log("Your total comes to $" + totalPrice);
                 showTable();
