@@ -1,4 +1,4 @@
-//Require mysql and inquirer npm packages
+//Require mysql, inquirer, and console.table npm packages
 var inquirer = require("inquirer");
 var mysql = require("mysql");
 var cTable = require("console.table")
@@ -70,7 +70,7 @@ function lowInv() {
 //Function that allows the manager to add to the inventory for an item
 function addInv() {
     inquirer.prompt([
-        //Ask the user the ID of the item they want to increase the inventory for
+        //Ask the manager the ID of the item they want to increase the inventory for
         {
             type: "input",
             name: "idNumber",
@@ -82,15 +82,11 @@ function addInv() {
             message: "How many units would you like to add to the inventory?"
         }
     ]).then(function(user) {
-        var newInventory;
         //Get the current inventory of the product
         connection.query("SELECT stock_quantity FROM products WHERE id = ?", [user.idNumber], function(err, res) {
             if(err) throw err;
-            newInventory = res[0].stock_quantity + user.quantity;
-            // console.log(oldInventory);
         })
         //Update the database with the new inventory
-        // connection.query("UPDATE products SET stock_quantity = ? WHERE id = ?", [user.quantity, user.idNumber], function(err) {
         connection.query("UPDATE products SET stock_quantity = stock_quantity + ? WHERE id = ?", [(user.quantity), user.idNumber], function(err) {
             if (err) throw err;
             promptUser();
@@ -100,5 +96,44 @@ function addInv() {
 
 //Function that allows the manager to add a product
 function addProduct() {
-
+    inquirer.prompt([
+        //Ask the manager for the infomation of the new product
+        {
+            type: "input",
+            name: "name",
+            message: "What is the name of the product you would like to add?"
+        },
+        {
+            type: "input",
+            name: "department",
+            message: "In which department does this product belong?"
+        },
+        {
+            type: "input",
+            name: "cost",
+            message: "What is the price of this product?"
+        },
+        {
+            type: "input",
+            name: "quantity",
+            message: "How many units would you like to add?"
+        }
+    ]).then(function(user) {
+        connection.query("INSERT INTO products SET ?",
+        [{
+            product_name: user.name
+        },
+        {
+            department_name: user.department
+        },
+        {
+            price: user.cost
+        },
+        {
+            stock_quantity: user.quantity
+        }], function (err) {
+            if(err) throw err;
+        });
+    
+    });
 };
