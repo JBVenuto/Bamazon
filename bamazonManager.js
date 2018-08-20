@@ -83,9 +83,9 @@ function addInv() {
         }
     ]).then(function(user) {
         //Get the current inventory of the product
-        connection.query("SELECT stock_quantity FROM products WHERE id = ?", [user.idNumber], function(err, res) {
-            if(err) throw err;
-        })
+        // connection.query("SELECT stock_quantity FROM products WHERE id = ?", [user.idNumber], function(err, res) {
+        //     if(err) throw err;
+        // })
         //Update the database with the new inventory
         connection.query("UPDATE products SET stock_quantity = stock_quantity + ? WHERE id = ?", [(user.quantity), user.idNumber], function(err) {
             if (err) throw err;
